@@ -7,35 +7,47 @@ class GildedRose
     @quality = quality
   end
 
-  def tick
+  def decrease_days_remaining
+        if @name != "Sulfuras, Hand of Ragnaros"
+      @days_remaining = @days_remaining - 1
+    end
+  end
 
-    if @name != "Aged Brie" and @name != "Backstage passes to a TAFKAL80ETC concert"
-      if @quality > 0
+  def decrease_quality
+          if @quality > 0
         if @name == "Conjured Mana Cake"
           @quality = @quality - 2
         elsif @name != "Sulfuras, Hand of Ragnaros"
           @quality = @quality - 1
         end
       end
-    elsif @quality < 50
-        @quality = @quality + 1
-        if @name == "Backstage passes to a TAFKAL80ETC concert"
-          if @days_remaining < 11
-            if @quality < 50
-              @quality = @quality + 1
-            end
-          end
-          if @days_remaining < 6
-            if @quality < 50
-              @quality = @quality + 1
-            end
+  end
+
+  def increase_quality_for_special_items
+    @quality = @quality + 1
+    if @name == "Backstage passes to a TAFKAL80ETC concert"
+      if @days_remaining < 11
+        if @quality < 50
+          @quality = @quality + 1
+        end
+      end
+        if @days_remaining < 6
+          if @quality < 50
+            @quality = @quality + 1
           end
         end
     end
+  end
 
-    if @name != "Sulfuras, Hand of Ragnaros"
-      @days_remaining = @days_remaining - 1
+  def tick
+
+    if @name != "Aged Brie" and @name != "Backstage passes to a TAFKAL80ETC concert"
+      decrease_quality
+    elsif @quality < 50
+      increase_quality_for_special_items
     end
+
+    decrease_days_remaining
 
     if @days_remaining < 0
       if @name != "Aged Brie"
